@@ -152,7 +152,7 @@ const educationCards = [
 const educationLogos = [
   {
     name: "VIT",
-    imgPath: "public/images/VIT1.png",
+    imgPath: "/images/VIT1.png",
   },
   {
     name: "Bharath Institute",
