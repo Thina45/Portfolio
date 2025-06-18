@@ -113,7 +113,7 @@ const educationCards = [
   {
     description:
       "VIT provided me with a comprehensive understanding of advanced computing concepts and industry practices. The institution was pivotal in shaping my professional foundation.",
-    logoPath: "public/images/VIT1.png",
+    logoPath: "/images/Vellore.jpeg",
     title: "Master of Computer Applications",
     date: "2024 - 2026",
     responsibilities: [
@@ -152,7 +152,7 @@ const educationCards = [
 const educationLogos = [
   {
     name: "VIT",
-    imgPath: "/images/VIT1.png",
+    imgPath: "/images/Vellore.jpeg",
   },
   {
     name: "Bharath Institute",
