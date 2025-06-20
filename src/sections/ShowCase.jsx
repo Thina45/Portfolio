@@ -49,7 +49,7 @@ const ShowCase = () => {
         <div className="showcaselayout">
           <div ref={project1} className="first-project-wrapper">
             <div className="image-wrapper">
-              <img src="/images/PG ADMISSION.png" alt="Ryde App Interface" />
+              <img src="/images/PG ADMISSION.webp" alt="Ryde App Interface" />
             </div>
             <div className="text-content">
               <h2>Seamless PG Admissions at Your Fingertips</h2>
@@ -64,14 +64,14 @@ const ShowCase = () => {
           <div className="project-list-wrapper overflow-hidden">
             <div className="project" ref={project2}>
               <div className="image-wrapper bg-[#FFEFDB]">
-                <img src="/images/Blog.png" alt="Blog" />
+                <img src="/images/Blog.webp" alt="Blog" />
               </div>
               <h2>THE BLOG APP</h2>
             </div>
 
             <div className="project" ref={project3}>
               <div className="image-wrapper bg-[#FFEFDB]">
-                <img src="/images/CrowScape.png" alt="CrowScape" />
+                <img src="/images/CrowScape.webp" alt="CrowScape" />
               </div>
               <h2>CROWSCAPE</h2>
             </div>
