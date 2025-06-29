@@ -1,7 +1,8 @@
 import React from "react";
+import { Suspense, useState, useEffect } from "react";
 import { words } from "../constants";
 import Button from "../components/Button";
-import HeroEXp from "../components/HeroModels/HeroEXp";
+const HeroEXp = React.lazy(() => import("../components/HeroModels/HeroEXp"));
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import AnimatedCounter from "../components/AnimatedCounter";
