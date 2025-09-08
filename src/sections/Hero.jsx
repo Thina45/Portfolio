@@ -1,5 +1,5 @@
-import React from "react";
-import { Suspense, useState, useEffect } from "react";
+import React, { Suspense } from "react";
+import { useMediaQuery } from "react-responsive"; // ✅ import this
 import { words } from "../constants";
 import Button from "../components/Button";
 const HeroEXp = React.lazy(() => import("../components/HeroModels/HeroEXp"));
@@ -8,6 +8,9 @@ import { useGSAP } from "@gsap/react";
 import AnimatedCounter from "../components/AnimatedCounter";
 
 const Hero = () => {
+  // detect mobile
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+
   useGSAP(() => {
     gsap.fromTo(
       ".hero-text h1",
@@ -15,13 +18,15 @@ const Hero = () => {
       { y: 0, opacity: 1, stagger: 0.2, duration: 1, ease: "power2.inOut" }
     );
   });
+
   return (
     <section id="hero" className="relative overflow-hidden">
       <div className="absolute top-0 left-0 z-10">
         <img src="/images/bg.png" alt="background" />
       </div>
+
       <div className="hero-layout">
-        {/* left : HERO CONTENT */}
+        {/* LEFT : HERO CONTENT */}
         <header className="flex flex-col justify-center md:w-full w-screen md:px-5 px-20">
           <div className="flex flex-col gap-7">
             <div className="hero-text">
@@ -60,13 +65,15 @@ const Hero = () => {
         </header>
 
         {/* RIGHT : 3D Model */}
-
         <figure>
-          <div className="hero-3d-layout">
-            <HeroEXp />
-          </div>
+          {!isMobile && (
+            <div className="hero-3d-layout">
+              <HeroEXp />
+            </div>
+          )}
         </figure>
       </div>
+
       <AnimatedCounter />
     </section>
   );
