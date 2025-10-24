@@ -52,28 +52,12 @@ const abilities = [
     desc: "Making sure projects are completed on schedule, with quality & attention to detail.",
   },
 ];
-
 const techStackImgs = [
-  {
-    name: "React Developer",
-    imgPath: "public/images/react.png",
-  },
-  {
-    name: "Python Developer",
-    imgPath: "public/images/python.svg",
-  },
-  {
-    name: "Backend Developer",
-    imgPath: "public/images/node.png",
-  },
-  {
-    name: "Interactive Developer",
-    imgPath: "public/images/three.png",
-  },
-  {
-    name: "Project Manager",
-    imgPath: "public/images/git.svg",
-  },
+  { name: "React Developer", imgPath: "/images/react.png" },
+  { name: "Python Developer", imgPath: "/images/python.svg" },
+  { name: "Backend Developer", imgPath: "/images/node.png" },
+  { name: "Project Manager", imgPath: "/images/git.svg" },
+  { name: "Interactive Developer", imgPath: "/images/three.png" },
 ];
 
 const techStackIcons = [
