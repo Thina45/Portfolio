@@ -3,17 +3,20 @@ import emailjs from "@emailjs/browser";
 import TitleHeader from "../components/TitleHeader";
 import ContactExperience from "../components/models/contact/ContactExperience";
 
+// Initialize EmailJS
+emailjs.init(import.meta.env.VITE_APP_EMAIL_JS_PUBLIC_KEY);
+
 const Contact = () => {
   const formRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [message, setMessage] = useState({ type: "", text: "" });
   const [form, setForm] = useState({
-    name: "",
-    email: "",
+    user_name: "",
+    user_email: "",
     message: "",
   });
 
-  // ✅ Detect screen size
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
@@ -29,17 +32,32 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setMessage({ type: "", text: "" });
 
     try {
-      await emailjs.sendForm(
-        import.meta.env.VITE_APP_EMAIL_JS_SERVICE_ID,
-        import.meta.env.VITE_APP_EMAIL_JS_TEMPLATE_ID,
+      const serviceId = import.meta.env.VITE_APP_EMAIL_JS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_APP_EMAIL_JS_TEMPLATE_ID;
+      const publicKey = import.meta.env.VITE_APP_EMAIL_JS_PUBLIC_KEY;
+
+      if (!serviceId || !templateId || !publicKey) {
+        throw new Error("Missing EmailJS configuration. Check your .env file.");
+      }
+
+      const response = await emailjs.sendForm(
+        serviceId,
+        templateId,
         formRef.current,
-        import.meta.env.VITE_APP_EMAIL_JS_PUBLIC_KEY
+        publicKey
       );
-      setForm({ name: "", email: "", message: "" });
+
+      if (response.status === 200) {
+        setMessage({ type: "success", text: "✅ Message sent successfully! I'll get back to you soon." });
+        setForm({ user_name: "", user_email: "", message: "" });
+      }
     } catch (error) {
       console.error("EmailJS Error:", error);
+      const errorMsg = error.text || error.message || "Failed to send message";
+      setMessage({ type: "error", text: `❌ ${errorMsg}` });
     } finally {
       setLoading(false);
     }
@@ -49,8 +67,8 @@ const Contact = () => {
     <section id="contact" className="flex-center section-padding">
       <div className="w-full h-full md:px-10 px-5">
         <TitleHeader
-          title="Get in Touch – Let’s Connect"
-          sub="💬 Have questions or ideas? Let’s talk! 🚀"
+          title="Get in Touch – Let's Connect"
+          sub="💬 Have questions or ideas? Let's talk! 🚀"
         />
         <div className="grid-12-cols mt-16">
           {/* Left: Contact Form */}
@@ -62,27 +80,27 @@ const Contact = () => {
                 className="w-full flex flex-col gap-7"
               >
                 <div>
-                  <label htmlFor="name">Your name</label>
+                  <label htmlFor="user_name">Your name</label>
                   <input
                     type="text"
-                    id="name"
-                    name="name"
-                    value={form.name}
+                    id="user_name"
+                    name="user_name"
+                    value={form.user_name}
                     onChange={handleChange}
-                    placeholder="What’s your good name?"
+                    placeholder="What's your good name?"
                     required
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="email">Your Email</label>
+                  <label htmlFor="user_email">Your Email</label>
                   <input
                     type="email"
-                    id="email"
-                    name="email"
-                    value={form.email}
+                    id="user_email"
+                    name="user_email"
+                    value={form.user_email}
                     onChange={handleChange}
-                    placeholder="What’s your email address?"
+                    placeholder="What's your email address?"
                     required
                   />
                 </div>
@@ -99,6 +117,16 @@ const Contact = () => {
                     required
                   />
                 </div>
+
+                {message.text && (
+                  <div className={`p-3 rounded-md text-center ${
+                    message.type === "success" 
+                      ? "bg-green-900 text-green-200" 
+                      : "bg-red-900 text-red-200"
+                  }`}>
+                    {message.text}
+                  </div>
+                )}
 
                 <button type="submit" disabled={loading}>
                   <div className="cta-button group">
