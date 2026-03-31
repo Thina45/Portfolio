@@ -11,6 +11,7 @@ const Contact = () => {
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
+  const [errors, setErrors] = useState({});
   const [form, setForm] = useState({
     user_name: "",
     user_email: "",
@@ -24,15 +25,49 @@ const Contact = () => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!form.user_name.trim()) {
+      newErrors.user_name = "Name is required";
+    } else if (form.user_name.trim().length < 2) {
+      newErrors.user_name = "Name must be at least 2 characters";
+    }
+
+    if (!form.user_email.trim()) {
+      newErrors.user_email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.user_email)) {
+      newErrors.user_email = "Please enter a valid email";
+    }
+
+    if (!form.message.trim()) {
+      newErrors.message = "Message is required";
+    } else if (form.message.trim().length < 10) {
+      newErrors.message = "Message must be at least 10 characters";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: "" });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setMessage({ type: "", text: "" });
+
+    if (!validateForm()) {
+      setMessage({ type: "error", text: "❌ Please fix the errors above" });
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const serviceId = import.meta.env.VITE_APP_EMAIL_JS_SERVICE_ID;
@@ -53,6 +88,7 @@ const Contact = () => {
       if (response.status === 200) {
         setMessage({ type: "success", text: "✅ Message sent successfully! I'll get back to you soon." });
         setForm({ user_name: "", user_email: "", message: "" });
+        setErrors({});
       }
     } catch (error) {
       console.error("EmailJS Error:", error);
@@ -88,8 +124,11 @@ const Contact = () => {
                     value={form.user_name}
                     onChange={handleChange}
                     placeholder="What's your good name?"
-                    required
+                    className={errors.user_name ? "border-red-500" : ""}
                   />
+                  {errors.user_name && (
+                    <p className="text-red-400 text-sm mt-1">{errors.user_name}</p>
+                  )}
                 </div>
 
                 <div>
@@ -101,8 +140,11 @@ const Contact = () => {
                     value={form.user_email}
                     onChange={handleChange}
                     placeholder="What's your email address?"
-                    required
+                    className={errors.user_email ? "border-red-500" : ""}
                   />
+                  {errors.user_email && (
+                    <p className="text-red-400 text-sm mt-1">{errors.user_email}</p>
+                  )}
                 </div>
 
                 <div>
@@ -114,8 +156,11 @@ const Contact = () => {
                     onChange={handleChange}
                     placeholder="How can I help you?"
                     rows="5"
-                    required
+                    className={errors.message ? "border-red-500" : ""}
                   />
+                  {errors.message && (
+                    <p className="text-red-400 text-sm mt-1">{errors.message}</p>
+                  )}
                 </div>
 
                 {message.text && (
